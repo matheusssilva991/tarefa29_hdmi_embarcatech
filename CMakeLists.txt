@@ -120,11 +120,16 @@ add_custom_library(adc_reader
     hardware_gpio
 )
 
+
 # =========================================================================
-# EXECUTÁVEL PRINCIPAL
+# EXECUTÁVEL PRINCIPAL (parametrizável)
 # =========================================================================
 
-add_executable(${PROJECT_NAME} ${PROJECT_NAME}.c)
+set(MAIN_SRC main_tx_uart.c CACHE STRING "Arquivo principal do projeto")
+# Para usar main.c, troque para:
+# set(MAIN_SRC main.c CACHE STRING "Arquivo principal do projeto")
+
+add_executable(${PROJECT_NAME} ${MAIN_SRC})
 
 pico_set_program_name(${PROJECT_NAME} "IHM Digital DVI")
 pico_set_program_version(${PROJECT_NAME} "0.1")
