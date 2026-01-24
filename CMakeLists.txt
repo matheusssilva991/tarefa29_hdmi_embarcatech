@@ -125,7 +125,7 @@ add_custom_library(adc_reader
 # EXECUTÁVEL PRINCIPAL (parametrizável)
 # =========================================================================
 
-set(MAIN_SRC main_tx_uart.c CACHE STRING "Arquivo principal do projeto")
+set(MAIN_SRC main.c CACHE STRING "Arquivo principal do projeto")
 # Para usar main.c, troque para:
 # set(MAIN_SRC main.c CACHE STRING "Arquivo principal do projeto")
 
@@ -135,8 +135,8 @@ pico_set_program_name(${PROJECT_NAME} "IHM Digital DVI")
 pico_set_program_version(${PROJECT_NAME} "0.1")
 
 # Desabilita saída serial
-pico_enable_stdio_uart(${PROJECT_NAME} 0)
-pico_enable_stdio_usb(${PROJECT_NAME} 0)
+pico_enable_stdio_uart(${PROJECT_NAME} 1)
+pico_enable_stdio_usb(${PROJECT_NAME} 1)
 
 # Configurações de compilação
 target_compile_definitions(${PROJECT_NAME} PRIVATE

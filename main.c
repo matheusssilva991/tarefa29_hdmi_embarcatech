@@ -20,49 +20,7 @@
 // Protótipos
 bool uart_read_line(char *buffer, size_t max_len, uint32_t timeout_ms);
 int16_t parse_adc_value(const char *message);
-
-// Callback para botão BOOTSEL
-static void gpio_irq_handler(uint gpio, uint32_t events)
-{
-    reset_usb_boot(0, 0);
-}
-
-bool uart_read_line(char *buffer, size_t max_len, uint32_t timeout_ms)
-{
-    size_t pos = 0;
-    absolute_time_t timeout = make_timeout_time_ms(timeout_ms);
-
-    while (pos < max_len - 1)
-    {
-        if (time_reached(timeout))
-        {
-            buffer[pos] = '\0';
-            return false; // Timeout
-        }
-
-        if (uart_is_readable(UART_ID))
-        {
-            char c = uart_getc(UART_ID);
-
-            if (c == '\n')
-            {
-                buffer[pos] = '\0';
-                return true; // Linha completa recebida
-            }
-            else if (c != '\r') // Ignora \r
-            {
-                buffer[pos++] = c;
-            }
-        }
-        else
-        {
-            sleep_us(100); // Pequeno delay para não saturar CPU
-        }
-    }
-
-    buffer[pos] = '\0';
-    return false; // Buffer cheio
-}
+static void gpio_irq_handler(uint gpio, uint32_t events);
 
 int __not_in_flash_func(main)()
 {
@@ -132,7 +90,8 @@ int __not_in_flash_func(main)()
     }
 }
 
-// Função para ler linha completa via UART (até \n)
+
+// Função para ler uma linha via UART com timeout
 bool uart_read_line(char *buffer, size_t max_len, uint32_t timeout_ms)
 {
     size_t pos = 0;
@@ -170,6 +129,7 @@ bool uart_read_line(char *buffer, size_t max_len, uint32_t timeout_ms)
     return false; // Buffer cheio
 }
 
+
 // Extrai valor do ADC da mensagem "MSG#123 | ADC: 4095"
 int16_t parse_adc_value(const char *message)
 {
@@ -183,4 +143,11 @@ int16_t parse_adc_value(const char *message)
         }
     }
     return -1; // Erro no parse
+}
+
+
+// Callback para botão BOOTSEL
+void gpio_irq_handler(uint gpio, uint32_t events)
+{
+    reset_usb_boot(0, 0);
 }
