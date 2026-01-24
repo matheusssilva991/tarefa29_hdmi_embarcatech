@@ -120,16 +120,27 @@ add_custom_library(adc_reader
     hardware_gpio
 )
 
+# Sensor de Luz: Lê intensidade luminosa via BH1750
+add_custom_library(bh1750
+    lib/sensor_luz/bh1750.c
+    hardware_i2c
+    pico_stdlib
+)
+
 
 # =========================================================================
 # EXECUTÁVEL PRINCIPAL (parametrizável)
 # =========================================================================
 
 set(MAIN_SRC main.c CACHE STRING "Arquivo principal do projeto")
-# Para usar main.c, troque para:
-# set(MAIN_SRC main.c CACHE STRING "Arquivo principal do projeto")
+# Para usar main_tx_uart.c, troque para:
+# set(MAIN_SRC main_tx_uart.c CACHE STRING "Arquivo principal do projeto")
 
 add_executable(${PROJECT_NAME} ${MAIN_SRC})
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/lib/sensor_luz
+)
 
 pico_set_program_name(${PROJECT_NAME} "IHM Digital DVI")
 pico_set_program_version(${PROJECT_NAME} "0.1")
@@ -154,6 +165,7 @@ target_link_libraries(${PROJECT_NAME}
     terminal
     display
     adc_reader
+    bh1750
 )
 
 pico_add_extra_outputs(${PROJECT_NAME})

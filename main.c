@@ -19,7 +19,7 @@
 
 // Protótipos
 bool uart_read_line(char *buffer, size_t max_len, uint32_t timeout_ms);
-int16_t parse_adc_value(const char *message);
+int16_t parse_lux_value(const char *message);
 static void gpio_irq_handler(uint gpio, uint32_t events);
 
 int __not_in_flash_func(main)()
@@ -57,16 +57,16 @@ int __not_in_flash_func(main)()
         // Tenta ler linha via UART (timeout 1000ms)
         if (uart_read_line(uart_buffer, sizeof(uart_buffer), 1000))
         {
-            // Parse do valor ADC
-            int16_t adc_value = parse_adc_value(uart_buffer);
+            // Parse do valor LUX
+            int16_t lux_value = parse_lux_value(uart_buffer);
 
-            if (adc_value >= 0)
+            if (lux_value >= 0)
             {
                 // Limpa linha central
                 terminal_clear_line(center_y, COLOR_BLACK);
 
                 // Monta mensagem para exibir
-                sprintf(buffer, "UART RX - ADC Recebido: %d", adc_value);
+                sprintf(buffer, "Luminosidade: %d LUX", lux_value);
 
                 // Escreve centralizado
                 terminal_write_centered(center_y, buffer, COLOR_WHITE, COLOR_BLUE);
@@ -130,14 +130,14 @@ bool uart_read_line(char *buffer, size_t max_len, uint32_t timeout_ms)
 }
 
 
-// Extrai valor do ADC da mensagem "MSG#123 | ADC: 4095"
-int16_t parse_adc_value(const char *message)
+// Extrai valor de LUX da mensagem "LUX: 2450"
+int16_t parse_lux_value(const char *message)
 {
-    const char *adc_ptr = strstr(message, "ADC:");
-    if (adc_ptr)
+    const char *lux_ptr = strstr(message, "LUX:");
+    if (lux_ptr)
     {
         int value;
-        if (sscanf(adc_ptr, "ADC: %d", &value) == 1)
+        if (sscanf(lux_ptr, "LUX: %d", &value) == 1)
         {
             return (int16_t)value;
         }
