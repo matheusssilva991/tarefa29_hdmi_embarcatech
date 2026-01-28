@@ -132,7 +132,7 @@ add_custom_library(bh1750
 # EXECUTÁVEL PRINCIPAL (parametrizável)
 # =========================================================================
 
-set(MAIN_SRC main.c CACHE STRING "Arquivo principal do projeto")
+set(MAIN_SRC main_tx_uart.c CACHE STRING "Arquivo principal do projeto")
 # Para usar main_tx_uart.c, troque para:
 # set(MAIN_SRC main_tx_uart.c CACHE STRING "Arquivo principal do projeto")
 

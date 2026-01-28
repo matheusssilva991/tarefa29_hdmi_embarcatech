@@ -11,12 +11,12 @@
 #define UART_RX_PIN 1 // GP1 (SCL no header I2C0) -> Ligar no TX do outro
 
 // Para I2C (sensor de luz BH1750)
-#define I2C_PORT i2c0
-#define SDA_PIN 4   // GP4 para I2C0
-#define SCL_PIN 5   // GP5 para I2C0
+#define I2C_PORT i2c1
+#define SDA_PIN 2   // GP2 para I2C1
+#define SCL_PIN 3   // GP3 para I2C1
 
-// SDA: GPIO 4 (I2C0)
-// SCL: GPIO 5 (I2C0)
+// SDA: GPIO 2 (I2C1)
+// SCL: GPIO 3 (I2C1)
 // Endereço BH1750: 0x23
 
 // Função para enviar string via UART
